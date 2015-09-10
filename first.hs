@@ -164,3 +164,30 @@ lockerLookUp number map = case Map.lookup number map
        Just (state, code) -> if state /= Taken
        then Right code
        else Left $ show number ++ " taken"
+
+infixr 5 :-:
+data NonyList a = Empty | a :-: (NonyList a) deriving (Show, Read, Eq, Ord)
+
+infixr ^++
+(^++) :: NonyList a -> NonyList a -> NonyList a
+Empty ^++ y = y
+(x:-:xs) ^++ y = x :-: xs ^++ y
+
+data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show)
+
+singleton :: a -> Tree a
+singleton x = Node x EmptyTree EmptyTree
+
+treeInsert :: (Ord a) => a -> Tree a -> Tree a
+treeInsert x EmptyTree = singleton x
+treeInsert x (Node a b c)
+    | x == a = Node a b c
+    | x < a = Node a (treeInsert x b) c
+    | x > a = Node a b (treeInsert x c)
+
+treeElem :: (Ord a)  => a -> Tree a -> Bool
+treeElem _ EmptyTree = False
+treeElem x (Node a b c)
+    | x == a = True
+    | x < a = treeElem x b
+    | x > a = treeElem x c
