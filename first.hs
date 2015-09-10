@@ -138,3 +138,29 @@ area (Rectangle (Point x1 y1) (Point x2 y2)) = (abs $ x2 - x1) * (abs $ y2 - y1)
 nudge :: Shape -> Float -> Float -> Shape
 nudge (Circle (Point x y) r) a b = Circle (Point (x+a) (y+b)) r
 nudge (Rectangle (Point x1 y1) (Point x2 y2)) a b = Rectangle (Point (x1+a) (y1+b)) (Point (x2+a) (y2+b))
+
+data Person = Person { firstName :: String
+    , lastName :: String
+    , age :: Int
+    , height :: Float
+    , phoneNumber :: String
+    , flavor :: String }
+    deriving (Show)
+
+data Vector a = Vector a a a deriving (Show)
+
+vplus :: (Num a) => Vector a -> Vector a -> Vector a
+vplus (Vector i j k) (Vector l m n) = Vector (i+l) (j+m) (k+n)
+
+data TwoItems = Hoge | Piyo
+    deriving (Eq, Ord, Show, Read, Bounded, Enum)
+
+data LockerState = Taken | Free deriving (Show, Eq)
+type Code = String
+type LockerMap = Map.Map Int (LockerState, Code)
+lockerLookUp :: Int -> LockerMap -> Either String Code
+lockerLookUp number map = case Map.lookup number map
+    of Nothing -> Left $ show number ++ " not exist"
+       Just (state, code) -> if state /= Taken
+       then Right code
+       else Left $ show number ++ " taken"
