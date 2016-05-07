@@ -200,7 +200,6 @@ instance Eq TrafficLight where
     Yellow == Yellow = True
     _ == _ = False
 
-
 instance Show TrafficLight where
     show Red = "Red light"
     show Yellow = "Yellow light"
